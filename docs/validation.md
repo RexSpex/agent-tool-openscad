@@ -1,4 +1,29 @@
-# Validation — 2026-10-14
+# Validation
+
+## 2026-11-03
+
+[Linux amd64 workflow](https://github.com/RexSpex/agent-tool-openscad/actions/runs/41672495354) passes on Ubuntu 24.04.
+Docker Desktop 29.8.0 on macOS Apple Silicon passes with native Linux arm64 image.
+
+Both environments pass image build, healthy startup, desktop redirect, VNC handshake,
+MCP discovery, OpenSCAD check, PNG rendering, STL export, and geometry checks.
+Test cube measures 10 × 20 × 30 mm, volume 6000 cubic mm, with watertight mesh.
+Model survives container recreation. Terminal MCP client connects and calls tools.
+Local terminal client also reads persistent model and returns nonzero for missing tool.
+Seven Python tests cover occupied ports, settings preservation, CPU adaptation,
+JSON/SSE negotiation, sessions, nested tool errors, and local image artifacts.
+
+Default host port is 48321. Setup selects another free port when occupied,
+saves selected port in .env, and caps CPU limit to available Docker CPUs.
+Software renderer uses 2 threads to avoid observed crashes under renderer memory cap on high-core hosts.
+`CAD_SOFTWARE_THREADS` controls Mesa [LP_NUM_THREADS](https://docs.mesa3d.org/envvars.html#lp-num-threads).
+Container port remains 8080. Build needs at least 12 GiB free host disk.
+A separate local setup with ports 48321 and 48322 occupied selects 48323 and passes smoke checks.
+
+Native harness configuration remains client-specific. Terminal MCP client is tested.
+Windows is not tested. Physical print quality is not established by geometry checks.
+
+## Earlier validation — 2026-10-14
 
 Portable image builds on Linux amd64 with Docker 29.8.2.
 

@@ -6,6 +6,7 @@ RUN pip install --no-cache-dir -r /opt/requirements.lock /opt/upstream && userad
 COPY docker/ /opt/
 ENV DISPLAY=:0 HOME=/home/cad QT_X11_NO_MITSHM=1 LIBGL_ALWAYS_SOFTWARE=1 OPENSCAD_PATH=/usr/bin/openscad MCP_TRANSPORT=http MCP_HOST=127.0.0.1 MCP_PORT=8000 MCP_ALLOWED_PATHS=/workspace MCP_TEMP_DIR=/workspace MCP_MAX_CONCURRENT_RENDERS=2 MCP_RENDER_TIMEOUT=120 MCP_MAX_MEMORY_MB=2048
 USER cad
+ENV LP_NUM_THREADS=2
 WORKDIR /workspace
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=10s --start-period=45s CMD ["python", "/opt/healthcheck.py"]

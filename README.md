@@ -41,6 +41,8 @@ python3 scripts/mcp.py --url http://localhost:48321/mcp list
 python3 scripts/mcp.py --url http://localhost:48321/mcp call check_openscad
 ```
 
+Returned images save under `.agent-output/`; CLI prints local file paths instead of base64.
+Use `--images-dir` to choose another directory.
 For tool arguments, pass a JSON object or `@arguments.json`. Client returns JSON and exits nonzero on tool errors.
 Read live tool schemas before creating designs. Setup and connection checks do not prove design correctness.
 Cloud-only agents need an approved route to your computer; localhost URLs work only on Docker host.
@@ -107,7 +109,8 @@ docker compose down
 
 Copy `.env.example` to `.env` and adjust port, CPU, memory, render workers, or timeout.
 Defaults: host loopback port 48321, 4 CPUs, 5 GiB memory, 2 concurrent renders,
-120-second render timeout. If port 48321 is occupied, run `python3 scripts/setup.py` to select another port.
+120-second render timeout. Software rendering uses 2 threads (`CAD_SOFTWARE_THREADS`)
+to keep renderer allocations within process memory limit on high-core machines. If port 48321 is occupied, run `python3 scripts/setup.py` to select another port.
 
 Container runs as UID 1000 with dropped capabilities and no-new-privileges.
 It mounts no Docker socket or host credentials.
@@ -146,5 +149,6 @@ in `requirements.lock`. Vendored MCP source and license are documented in
 [UPSTREAM.md](UPSTREAM.md).
 
 STL exports contain geometry; STL does not preserve material colors.
-No CPU architecture is forced. Linux amd64 is validated; arm64 and Docker
-Desktop remain untested. Details are recorded in [docs/validation.md](docs/validation.md).
+No CPU architecture is forced. Linux amd64 passes GitHub Actions acceptance.
+Native Linux arm64 passes Docker Desktop acceptance on Apple Silicon.
+Windows remains untested. Details are recorded in [docs/validation.md](docs/validation.md).

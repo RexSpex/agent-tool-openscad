@@ -13,6 +13,7 @@ services:
       MCP_TEMP_DIR: /workspace
       MCP_MAX_CONCURRENT_RENDERS: ${CAD_RENDER_WORKERS:-2}
       MCP_RENDER_TIMEOUT: ${CAD_RENDER_TIMEOUT:-120}
+      LP_NUM_THREADS: ${CAD_SOFTWARE_THREADS:-2}
     mem_limit: ${CAD_MEMORY_LIMIT:-5g}
     cpus: ${CAD_CPUS:-4}
     pids_limit: 256

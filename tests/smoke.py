@@ -1,5 +1,8 @@
 import base64, json, os, socket, ssl, sys, urllib.request, uuid
 from urllib.parse import urlparse
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from scripts.mcp import failed
 origin = (sys.argv[1] if len(sys.argv)>1 else "http://localhost:48321").rstrip("/")
 with urllib.request.urlopen(origin + "/", timeout=15) as response:
     assert response.status == 200
@@ -49,7 +52,7 @@ def rpc(method, params=None, notify=False):
     raise RuntimeError('Missing JSON-RPC response')
 def call(name, arguments):
     result = rpc('tools/call', {'name':name,'arguments':arguments})
-    assert not result.get('isError'), str(result)[:500]
+    assert not failed(result), str(result)[:500]
     contents = result.get('content', [])
     texts = [block['text'] for block in contents if block['type']=='text']
     print(name, 'OK', str(texts)[:400], 'images',sum(block['type']=='image' for block in contents))
