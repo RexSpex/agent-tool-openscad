@@ -1,0 +1,24 @@
+services:
+  openscad:
+    build: .
+    image: agent-tool-openscad:local
+    restart: unless-stopped
+    init: true
+    ports:
+      - "${CAD_BIND_ADDRESS:-127.0.0.1}:${CAD_PORT:-48321}:8080"
+    volumes:
+      - workspace:/workspace
+      - home:/home/cad
+    environment:
+      MCP_TEMP_DIR: /workspace
+      MCP_MAX_CONCURRENT_RENDERS: ${CAD_RENDER_WORKERS:-2}
+      MCP_RENDER_TIMEOUT: ${CAD_RENDER_TIMEOUT:-120}
+    mem_limit: ${CAD_MEMORY_LIMIT:-5g}
+    cpus: ${CAD_CPUS:-4}
+    pids_limit: 256
+    shm_size: 256m
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+volumes:
+  workspace:
+  home:

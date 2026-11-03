@@ -1,0 +1,26 @@
+name: Validate Docker tool
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test setup safeguards
+        run: python3 -m unittest discover -s tests -p test_*.py
+      - name: Build and validate fresh workspace
+        run: python3 scripts/setup.py
+      - name: Verify terminal agent client
+        run: python3 scripts/mcp.py call check_openscad
+      - name: Verify persistence after recreation
+        run: |
+          docker compose up -d --force-recreate --wait
+          python3 tests/smoke.py
+      - name: Logs on failure
+        if: failure()
+        run: docker compose logs --tail 100
+      - name: Stop test containers
+        if: always()
+        run: docker compose down
