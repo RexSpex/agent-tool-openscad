@@ -3,7 +3,7 @@
 ## 2026-11-03
 
 [Linux amd64 workflow](https://github.com/RexSpex/agent-tool-openscad/actions/runs/41672495354) passes on Ubuntu 24.04.
-Docker Desktop 29.8.0 on macOS Apple Silicon passes with native Linux arm64 image.
+Docker Desktop 4.91.0 (Docker Engine 29.8.0) on macOS Apple Silicon passes with native Linux arm64 image.
 
 Both environments pass image build, healthy startup, desktop redirect, VNC handshake,
 MCP discovery, OpenSCAD check, PNG rendering, STL export, and geometry checks.
